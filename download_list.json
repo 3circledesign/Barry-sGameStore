@@ -1,16 +1,16 @@
 [
     {
-        "id": "yANBtfwW",
+        "id": "nwGaUCTq",
         "file": "REMATCH_PATCH.zip",
         "description": "Main game patch archive"
     },
     {
-        "id": "BVpxp5te",
+        "id": "rGVNXKXS",
         "file": "Runtime\\Content\\Paks\\Runtime-WinGDKClient.pak",
         "description": "Game assets package"
     },
     {
-        "id": "67zRr1r2",
+        "id": "bEomapwy",
         "file": "Runtime\\Content\\Paks\\Runtime-WinGDKClient.ucas",
         "description": "Game assets container"
     }
