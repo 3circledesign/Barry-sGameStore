@@ -5,12 +5,12 @@
         "description": "Main game patch archive"
     },
     {
-        "id": "rGVNXKXS",
+        "id": "tUoAN5kV",
         "file": "Runtime\\Content\\Paks\\Runtime-WinGDKClient.pak",
         "description": "Game assets package"
     },
     {
-        "id": "bEomapwy",
+        "id": "ZaevTrfT",
         "file": "Runtime\\Content\\Paks\\Runtime-WinGDKClient.ucas",
         "description": "Game assets container"
     }
