@@ -1,0 +1,13 @@
+Before you install
+1. Make sure you have login XBOX app and also login into Microsoft Store
+
+How to install
+1. Run the REMATCH_INSTALLER.exe
+2. After installation, run the game from start menu
+3. Press the windows button on your keyboard
+4. Type Rematch, you will see Rematch with Unreal Engine Logo
+5. Alternatively, start the game by using "start_protected_game.exe"
+
+IMPORTANT NOTE: 
+IF THE INSTALLER FAILED, PLEASE DOWNLOAD Run_this_if_installer_failed.bat by right click and save as file
+Put Run_this_if_installer_failed.bat into the same folder as the installer and then run the Run_this_if_installer_failed.bat by double clicking on it. 
