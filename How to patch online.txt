@@ -1,0 +1,18 @@
+1. Make sure turn off antivirus
+2. If GameUnlocker download is being blocked by google chrom
+3. Turn off safe browsing temporarily
+4. Install and activate GameUnlocker.exe with given CDKEY
+5. Open GameUnlocker
+6. Drag and drop the .dat file onto GameUnlocker
+7. Install the game in Steam
+8. Download Palworld Online.zip 
+9. Extract Palworld Online.zip
+10. You should have 1 file and 2 folder
+ Folders
+ - Engine
+ - Pal
+ File
+ - Palworld.exe
+11. Copy all 3
+12. Paste inside the Palworld installation folder
+13. Run the game from Steam.
