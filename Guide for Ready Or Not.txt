@@ -1,0 +1,11 @@
+1. Install the game after using the Game Unlocker
+2. Download "ReadyOrNotOnlinePatch.zip"
+3. Extract the content from ReadyOrNotOnlinePatch.zip to the game installation folder
+4. Ready or not game folder commonly found in "X":\program files (x86)\steam\steamapps\common\Ready Or Not
+
+Note: X is your hardrive/hardisk
+
+5. Play the game from steam
+6. Invite your friends from steam
+
+Note: Game will show you are playing Spacewar, dont worry about it, it the method we use to hack the game to play online
