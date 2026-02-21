@@ -4576,10 +4576,10 @@ body {
   background: #2ca243;
   background:
     linear-gradient(135deg,
-      #2ca243 0%,
+      #000000 0%,
       #38b050 18%,
       #77bb44 36%,
-      #2ca243 54%,
+      #000000 54%,
       #4db558 72%,
       #2ca243 100%
     );
