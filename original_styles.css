@@ -664,7 +664,7 @@ img.cover.blurred-cover:hover {
   background: linear-gradient(145deg, #232323, #1a1a1a);
   border-radius: 12px;
   box-shadow: 0 12px 32px rgba(0, 0, 0, 0.85);
-  width: 800px;
+  width: 450px;
   max-width: 90vw;
   max-height: 90vh;
   display: none;
