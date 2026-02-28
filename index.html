@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="stylesheet" href="styles.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
+  <meta charset="UTF-8" />
+  <title>Steam Unlock Onennabe</title>
+
+
+</head>
+<body>
+  <!-- Offline Banner -->
+  <div id="offline-banner" data-i18n="offline_banner" style="display:none;position:sticky;top:0;z-index:9999;background:#2b2f3a;color:#ffeb3b;padding:8px 12px;font-weight:600;border-bottom:1px solid rgba(255,255,255,.12);">
+    API is offline — showing cached list. Latest games not loaded.
+  </div>
+
+<!-- Sidebar open button -->
+<button id="sidebar-open-btn" class="sidebar-open-btn" aria-label="Open sidebar">☰</button>
+
+<!-- Floating Cart Button (top-right) -->
+<button id="floating-cart-btn" class="floating-cart-btn" aria-label="View shopping cart" title="Shopping Cart">
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M9 2L7.17 4H1V6H3L6.6 15.59L5.24 18.04C4.52 19.37 5.48 21 7 21H19V19H7L8.1 17H15.55C16.3 17 16.96 16.59 17.3 15.97L20.88 9.48C21.25 8.82 20.77 8 20.01 8H5.21L4.27 6H9V2ZM7 22C5.9 22 5.01 22.9 5.01 24C5.01 25.1 5.9 26 7 26C8.1 26 9 25.1 9 24C9 22.9 8.1 22 7 22ZM17 22C15.9 22 15.01 22.9 15.01 24C15.01 25.1 15.9 26 17 26C18.1 26 19 25.1 19 24C19 22.9 18.1 22 17 22Z" transform="translate(0,-2)" fill="currentColor"/>
+  </svg>
+  <span id="floating-cart-badge" class="floating-cart-badge">0</span>
+</button>
+
+<!-- Activated-for Mini Profile (top-left) -->
+<div id="activated-mini-profile" class="activated-mini-profile" style="display:none;">
+  <img id="activated-mini-avatar" class="activated-mini-avatar"
+       src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100'><rect width='100%25' height='100%25' rx='28' ry='28' fill='%23222'/><text x='50%25' y='54%25' dominant-baseline='middle' text-anchor='middle' fill='%23aaa' font-family='Arial' font-size='14'>STEAM</text></svg>"
+       alt="Steam avatar" />
+  <div class="activated-mini-meta">
+    <div id="activated-mini-persona" class="activated-mini-persona">Unknown Steam User</div>
+    <div class="activated-mini-steamid">
+      <span class="activated-mini-k">SteamID</span>
+      <span id="activated-mini-steamid" class="activated-mini-v">UNKNOWN</span>
+    </div>
+  </div>
+</div>
+
+
+<!-- Sidebar -->
+<div id="sidebar" class="sidebar" aria-hidden="true" tabindex="-1">
+
+    <button id="sidebar-toggle" class="sidebar-toggle" aria-label="Close sidebar">×</button>
+
+    <!-- Sidebar Tools (collapsed by default) -->
+    <details id="sidebar-tools" class="sidebar-accordion">
+      <summary>
+        <span data-i18n="settings">Settings</span>
+        <span class="chev" aria-hidden="true">▸</span>
+      </summary>
+
+      <div class="accordion-body">
+        <!-- Parental Control (toggle) -->
+        <div class="sidebar-section">
+          <div class="toggle-row">
+            <span class="toggle-label" data-i18n="parental_control">Parental Control</span>
+            <label class="switch">
+              <input type="checkbox" id="pc-toggle" aria-label="Parental Control">
+              <span class="slider round"></span>
+            </label>
+          </div>
+          <small class="toggle-hint" data-i18n="hide_adult">Hide Adult Content</small>
+        </div>
+
+        <!-- Zoom Controls -->
+        <div class="sidebar-section">
+          <div class="zoom-controls">
+            <span class="toggle-hint" data-i18n="resize_ui">Resize UI</span>
+            <div class="zoom-buttons">
+              <button id="zoom-out" class="chip subtle">−</button>
+              <button id="zoom-in" class="chip subtle">＋</button>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <button id="activate-btn" class="sidebar-btn" data-i18n="activate_app">Activate App</button>
+          <button id="btn-delete-cdkey" class="sidebar-btn danger" title="Reset CDKEY" data-i18n="reset_activation">
+            Reset Activation
+          </button>
+        </div>
+      </div>
+    </details>
+
+
+
+    <!-- Theme Picker -->
+    <details id="sidebar-theme" class="sidebar-accordion">
+      <summary>
+        <span data-i18n="theme_label">🎨 Theme</span>
+        <span class="chev" aria-hidden="true">▸</span>
+      </summary>
+      <div class="accordion-body">
+        <div class="sidebar-section">
+          <small class="toggle-hint" data-i18n="choose_theme">Choose your store theme</small>
+          <div id="theme-btn-group" class="theme-btn-group" style="display:flex;flex-direction:column;gap:6px;margin-top:8px;">
+            <button class="sidebar-btn theme-pick-btn" data-theme="original">🎮 Original</button>
+            <button class="sidebar-btn theme-pick-btn" data-theme="cny">💜 Indigo Galaxy</button>
+            <button class="sidebar-btn theme-pick-btn" data-theme="hariraya">🌙 Hari Raya</button>
+          </div>
+          <div id="theme-active-label" style="margin-top:8px;font-size:11px;color:#888;text-align:center;"></div>
+        </div>
+      </div>
+    </details>
+
+    <!-- Language Switcher -->
+    <details id="sidebar-language" class="sidebar-accordion">
+      <summary>
+        <span data-i18n="language_label">🌐 Language</span>
+        <span class="chev" aria-hidden="true">▸</span>
+      </summary>
+      <div class="accordion-body">
+        <div class="sidebar-section">
+          <small class="toggle-hint" data-i18n="choose_language">Choose your language</small>
+          <div id="lang-btn-group" style="display:flex;flex-direction:column;gap:6px;margin-top:8px;">
+            <button class="sidebar-btn lang-pick-btn" data-lang="en">🇬🇧 English</button>
+            <button class="sidebar-btn lang-pick-btn" data-lang="bm">🇲🇾 Bahasa Melayu</button>
+            <button class="sidebar-btn lang-pick-btn" data-lang="zh">🇨🇳 中文</button>
+            <button class="sidebar-btn lang-pick-btn" data-lang="ke">🇲🇾 Kelate Ni 😂</button>
+          </div>
+          <div id="lang-active-label" style="margin-top:8px;font-size:11px;color:#888;text-align:center;"></div>
+        </div>
+      </div>
+    </details>
+     <button id="refresh-games-btn" class="sidebar-btn" data-i18n="refresh_games">Refresh Game List</button>
+    <button id="show-installed-btn" class="sidebar-btn" data-i18n="show_installed">Show Installed Only</button>
+    <button id="add-all-btn" class="sidebar-btn" style="display:none;" onclick="window._addAllBtnClick && window._addAllBtnClick()">Unlock<br><span style="font-size:15px;">[Top 5k Games]</span></button>
+  </div>
+
+  <!-- Main content -->
+  <div id="main-content" class="main-content">
+    <div class="app-logo-container">
+      <img src="/logo.png" alt="Steam Unlock Onennabe Logo" class="app-logo">
+    </div>
+
+    <div class="search-bar">
+      <input id="search" type="search" data-i18n-placeholder="search_placeholder" placeholder="Search by AppID or Game Name..." />
+
+      <div class="filter-row" id="filter-row">
+        <button id="filter-membership" class="chip" data-i18n="denuvo_games">Denuvo Games</button>
+        <button id="filter-top-downloads" class="chip" data-i18n="top_downloads">Top 20 Downloads</button>
+        <button id="filter-online" class="chip" data-i18n="online_supported">Online Supported</button>
+        <button id="filter-bypass" class="chip" data-i18n="bypass_available">Bypass Available</button>
+        <button id="filter-clear" class="chip subtle" data-i18n="filter_clear">Clear</button>
+
+        <!-- Toggle Genre Filter -->
+        <button id="toggle-genre" class="chip subtle" aria-expanded="false" aria-controls="genre-row" data-i18n="show_genre">
+          Show Genre Filter
+        </button>
+
+        <!-- Genre chips will be injected here -->
+        <div id="genre-row" class="genre-row"></div>
+      </div>
+    </div>
+
+    <div id="game-grid" class="grid"></div>
+
+<!-- REPLACE WITH THIS (adds jump to page): -->
+<div class="pagination">
+  <button id="prev" data-i18n="btn_prev">← Previous</button>
+  <span id="page-label">Page 1 of 1</span>
+  <button id="next" data-i18n="btn_next">Next →</button>
+
+  <!-- Jump to Page Feature -->
+  <div class="jump-to-page">
+    <input
+      type="number"
+      id="jump-to-page-input"
+      min="1"
+      placeholder="1-100"
+      aria-label="Jump to page number"
+    />
+    <button id="jump-to-page-btn" title="Jump to page" data-i18n="btn_go">Go</button>
+  </div>
+</div>
+  </div>
+
+  <!-- =============== MODALS (all direct children of <body>) =============== -->
+
+  <!-- Modal backdrop -->
+  <div id="modal-backdrop" class="modal-backdrop"></div>
+
+  <!-- Activation Modal -->
+  <div id="activation-modal" class="modal" role="dialog" aria-modal="true" aria-labelledby="activation-title" aria-describedby="activation-desc" tabindex="-1">
+    <div class="modal-content modal-activation">
+      <div class="act-top">
+        <div class="act-profile">
+          <img id="modal-avatar" class="act-avatar"
+               src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100'><rect width='100%25' height='100%25' rx='40' ry='40' fill='%23222'/><text x='50%25' y='54%25' dominant-baseline='middle' text-anchor='middle' fill='%23aaa' font-family='Arial' font-size='14'>STEAM</text></svg>"
+               alt="Steam avatar" />
+          <div class="act-id">
+            <h2 id="activation-title" class="act-title" data-i18n="activate_title">Activate Application</h2>
+            <div id="modal-persona" class="act-persona">Unknown Steam User</div>
+            <div class="act-steamid">
+              <span class="act-k">SteamID</span>
+              <span id="modal-steamid" class="act-v">UNKNOWN</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <p id="activation-desc" class="act-desc" data-i18n="activation_desc">
+        Enter your ONENNABE CD Key to activate for this Steam account. This will bind your Steam ID with the CDKEY.<br>
+        PLEASE ENSURE YOU ARE LOGGING IN USING CORRECT STEAM ACCOUNT. <br>
+        WE WILL NOT ASSIST IF YOU MADE A MISTAKE BINDING THE WRONG ACCOUNT!
+      </p>
+
+      <label id="modal-cdkey-label" for="modal-cdkey" class="act-label" data-i18n="cdkey_label">CD Key</label>
+      <input id="modal-cdkey" class="act-input" type="text" data-i18n-placeholder="cdkey_placeholder" placeholder="Enter CD Key" autocomplete="off" />
+
+      <div id="modal-activation-info" class="act-info"></div>
+
+      <div class="modal-actions act-actions">
+        <button id="modal-confirm" class="btn-confirm" data-i18n="btn_activate">Activate</button>
+        <button id="modal-cancel" class="btn-cancel" data-i18n="btn_cancel">Cancel</button>
+      </div>
+
+      <p id="modal-feedback" class="feedback act-feedback"></p>
+    </div>
+  </div>
+
+  <!-- Notification and Loading Modals -->
+  <div id="download-complete-modal" class="notification-modal" style="display:none;">
+    <div class="notification-content" data-i18n="download_complete">✅ Download Completed</div>
+  </div>
+
+  <div id="loading-modal" class="notification-modal" style="display:none;">
+    <div class="notification-content" id="loading-content" data-i18n="downloading">Downloading... Please wait</div>
+  </div>
+
+  <div id="details-loading-modal" class="notification-modal" style="display:none;">
+    <div class="notification-content" data-i18n="loading_details">Loading game details...</div>
+  </div>
+
+  <div id="remove-complete-modal" class="notification-modal" style="display:none;">
+    <div class="notification-content" style="background:#c62828;" data-i18n="game_removed">❌ Game Removed</div>
+  </div>
+
+  <!-- Game Details Modal -->
+  <div id="details-modal">
+    <div id="details-modal-content">
+      <button id="details-modal-close" aria-label="Close details modal">&times;</button>
+      <div id="details-modal-img-container">
+        <img id="details-modal-img" src="" alt="Game Cover" />
+      </div>
+      <div id="details-modal-body"></div>
+    </div>
+  </div>
+
+  <!-- Right-Side Popover Menu with Arrow -->
+  <div id="actions-popover" style="display:none;position:fixed;z-index:10000;">
+    <div id="popover-backdrop" style="position:fixed;inset:0;background:rgba(0,0,0,0.3);"></div>
+    <div id="popover-container" style="position:relative;background:linear-gradient(145deg,#1e2330,#252b3a);border-radius:12px;border:1px solid rgba(255,255,255,0.12);box-shadow:0 12px 40px rgba(0,0,0,0.6);padding:8px;min-width:240px;max-width:280px;">
+      <!-- Arrow pointing left to card -->
+      <div id="popover-arrow" style="position:absolute;left:-8px;top:20px;width:0;height:0;border-top:8px solid transparent;border-bottom:8px solid transparent;border-right:8px solid #1e2330;"></div>
+      <div id="popover-buttons" style="display:flex;flex-direction:column;gap:6px;"></div>
+    </div>
+  </div>
+
+  <!-- Bulk Download Modal -->
+  <div id="bulk-download-modal" class="modal" style="display:none; align-items:center; justify-content:center;">
+    <div class="notification-content" style="
+      min-width:340px;
+      max-width:95vw;
+      text-align:center;
+      background-color:#222;
+      padding:24px 18px;
+      border-radius:10px;
+      box-shadow:0 4px 12px rgba(0,0,0,0.3);
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      gap:12px;
+    ">
+      <div>
+        <svg style="animation:spin 1s linear infinite;" width="44" height="44" viewBox="0 0 48 48">
+          <circle cx="24" cy="24" r="20" stroke="#4caf50" stroke-width="5" fill="none" opacity="0.12"/>
+          <path d="M44 24a20 20 0 1 0-4.65 12.88"
+                fill="none" stroke="#4caf50" stroke-width="5"
+                stroke-linecap="round" stroke-dasharray="60 80"/>
+        </svg>
+      </div>
+      <progress id="bulk-download-progress" value="0" max="500"
+        style="width:95%;height:16px;border-radius:8px;appearance:none;"></progress>
+      <div id="bulk-download-label" style="font-size:0.99rem;color:#4caf50;"></div>
+      <button id="bulk-cancel-btn" class="btn-cancel" style="margin-top:12px;" data-i18n="btn_cancel">Cancel</button>
+    </div>
+  </div>
+
+  <!-- Bulk AppID Modal -->
+  <div id="bulk-appid-modal" class="modal">
+    <div class="modal-content">
+      <h3 data-i18n="adding_games">Adding your games</h3>
+      <p id="bulk-progress-text" data-i18n="starting">Starting...</p>
+      <progress id="bulk-progress-bar" value="0" max="100" style="width:100%; height:20px; border-radius: 8px;"></progress>
+      <button id="bulk-appidcancel-btn" class="btn-cancel" data-i18n="btn_cancel">Cancel</button>
+    </div>
+  </div>
+
+  <!-- SteamID Mismatch Modal -->
+<!-- SteamID Mismatch Modal (Professional) -->
+<div id="steamid-mismatch-modal" class="modal" role="alertdialog" aria-modal="true"
+     aria-labelledby="steamid-mismatch-title" style="display:none;">
+  <div class="modal-content modal-pro">
+    <div class="modal-pro__header">
+      <div class="modal-pro__badge" data-i18n="security">Security</div>
+      <h2 id="steamid-mismatch-title" class="modal-pro__title" data-i18n="mismatch_title">Steam Account Mismatch</h2>
+      <p class="modal-pro__subtitle" data-i18n="mismatch_subtitle">
+        This app is activated for a different Steam account. Please switch to the correct account to continue.
+      </p>
+    </div>
+
+    <div class="modal-pro__grid">
+      <!-- Current account -->
+      <div class="profile-card">
+        <div class="profile-card__label" data-i18n="currently_signed">Currently signed in</div>
+        <div class="profile-card__row">
+          <img id="mismatch-current-avatar" class="profile-card__avatar" alt="Current Steam avatar"
+               src="" onerror="this.style.display='none'">
+          <div class="profile-card__meta">
+            <div id="mismatch-current-persona" class="profile-card__name">Unknown Steam User</div>
+            <div class="profile-card__sub">
+              SteamID: <span id="current-steamid">UNKNOWN</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Activated account -->
+      <div class="profile-card profile-card--warn">
+        <div class="profile-card__label" data-i18n="activated_for">Activated for</div>
+        <div class="profile-card__row">
+          <img id="mismatch-activated-avatar" class="profile-card__avatar" alt="Activated Steam avatar"
+               src="" onerror="this.style.display='none'">
+          <div class="profile-card__meta">
+            <div id="mismatch-activated-persona" class="profile-card__name">Unknown Steam User</div>
+            <div class="profile-card__sub">
+              SteamID: <span id="activated-steamid">UNKNOWN</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-pro__note" data-i18n="mismatch_tip">
+      Tip: After switching Steam account, restart the app (or press the button below).
+    </div>
+
+    <div class="modal-actions modal-pro__actions">
+      <button id="restart-steam-btn-modal" class="sidebar-btn" data-i18n="restart_steam">
+        Restart Steam & Switch Account
+      </button>
+    </div>
+  </div>
+</div>
+
+
+  <!-- Refresh Game List Modal -->
+  <div id="refresh-list-modal" class="modal">
+    <div class="notification-content" style="min-width:340px; text-align:center;">
+      <div style="margin-bottom:14px;">
+        <svg id="refresh-anim" width="48" height="48" viewBox="0 0 48 48" style="animation:spin 1s linear infinite;">
+          <circle cx="24" cy="24" r="20" stroke="#1976d2" stroke-width="5" fill="none" opacity="0.15"/>
+          <path d="M44 24a20 20 0 1 0-4.65 12.88" fill="none" stroke="#1976d2" stroke-width="5" stroke-linecap="round" stroke-dasharray="60 80"/>
+          <polyline points="41,34 44,37 47,32" fill="none" stroke="#1976d2" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <div style="font-size:1.15rem; margin-bottom:7px; font-weight:bold; color:#1976d2;" data-i18n="refreshing">
+        Refreshing Game List...
+      </div>
+      <div style="margin-bottom: 18px; color:#223b61; opacity:0.8;" data-i18n="please_wait">
+        Please wait while we fetch the latest games for you.
+      </div>
+      <div style="margin-bottom:8px;">
+        <progress id="refresh-progress-bar" value="0" max="100"
+          style="width:92%; height:16px; border-radius:8px; background:#e3f2fd; accent-color:#1976d2;"></progress>
+      </div>
+      <div id="refresh-progress-label" style="font-size:0.99rem; color:#1976d2; margin-top:4px; font-weight:500;" data-i18n="starting">Starting...</div>
+    </div>
+  </div>
+
+  <!-- Custom Confirm Modal -->
+  <div id="custom-confirm-modal" class="modal">
+    <div class="notification-content" style="min-width:400px;text-align:center;">
+      <div id="custom-confirm-msg" style="margin-bottom:10px; font-size:1.1rem;"></div>
+      <div style="display:flex;justify-content:center;gap:5px;">
+        <button id="custom-confirm-ok" class="btn-confirm" data-i18n="btn_ok">OK</button>
+        <button id="custom-confirm-cancel" class="btn-cancel" data-i18n="btn_cancel">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Cart Review Modal -->
+  <div id="cart-review-modal" class="modal" tabindex="-1" aria-modal="true" style="display:none;">
+    <div class="modal-content cart-modal-content">
+      <h2 style="text-align:center; margin-bottom:16px;" data-i18n="review_cart">🛒 Review Your Cart</h2>
+      <div id="cart-list-container">
+        <ul id="cart-list" class="cart-list"></ul>
+        <p id="cart-empty-msg" class="cart-empty-msg" data-i18n="cart_empty">Your cart is empty.</p>
+      </div>
+      <div class="modal-actions cart-modal-actions">
+        <button id="cart-cancel-btn" class="btn-cancel" data-i18n="btn_cancel">Cancel</button>
+        <button id="cart-download-btn" class="btn-confirm">
+          <span style="font-weight:600;" data-i18n="download_cart">Download Cart</span>
+          (<span id="cart-modal-count">0</span>)
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Oneshot Install Modal -->
+  <div id="oneshot-install-modal" class="modal" style="display:none;z-index:9999;">
+    <div class="modal-content" style="min-width:320px;max-width:90vw;">
+      <h2 data-i18n="installing">Installing Oneshot Package…</h2>
+      <progress id="oneshot-install-progress" value="0" max="100" style="width:100%;height:20px;"></progress>
+      <div id="oneshot-install-label" style="margin-top:10px;color:#7cf;font-size:1.08rem;" data-i18n="preparing">Preparing…</div>
+    </div>
+  </div>
+
+  <!-- Changelog Modal -->
+  <div id="changelog-modal" style="display:none;position:fixed;top:0;left:0;right:0;bottom:0;z-index:20000;background:rgba(30,40,55,0.96);align-items:center;justify-content:center;">
+    <div style="max-width:900px;width:90vw;margin:50px auto;background:#222b38;border-radius:10px;box-shadow:0 0 30px #000a;padding:24px 36px;position:relative;">
+      <button id="close-changelog-btn" style="position:absolute;top:16px;right:18px;font-size:20px;background:none;border:none;color:#aaa;cursor:pointer;">&times;</button>
+      <h2 style="text-align:center;font-size:1.5em;margin-bottom:12px;color:#fff;" data-i18n="changelog">Changelog</h2>
+      <div id="changelog-content" style="max-height:540px;overflow:auto;color:#dadada;padding-right:4px;"></div>
+    </div>
+  </div>
+
+  <!-- General Notification Modal -->
+  <div id="notification-modal" class="notification-modal" style="display:none;">
+    <div class="notification-content" id="notification-content" style="min-width:320px; text-align:center;">
+      <!-- Content injected by JS -->
+    </div>
+  </div>
+
+  <!-- Parental Control PIN Modal -->
+  <div id="pc-pin-modal" class="modal" role="dialog" aria-modal="true" style="display:none;">
+    <div class="modal-content" style="max-width:420px;">
+      <h2 id="pc-pin-title" style="margin-bottom:8px;" data-i18n="set_pin">Set Parental PIN</h2>
+      <p id="pc-pin-desc" style="opacity:.85;margin-bottom:12px;" data-i18n="create_pin">Create a 4–8 digit PIN.</p>
+
+      <div id="pc-pin-setup-fields">
+        <label for="pc-pin-input" style="display:block;margin:6px 0 4px;" data-i18n="pin_label">PIN</label>
+        <input id="pc-pin-input" type="password" inputmode="numeric" pattern="[0-9]*" maxlength="8" placeholder="••••" autocomplete="off" />
+        <label for="pc-pin-confirm" style="display:block;margin:12px 0 4px;" data-i18n="confirm_pin">Confirm PIN</label>
+        <input id="pc-pin-confirm" type="password" inputmode="numeric" pattern="[0-9]*" maxlength="8" placeholder="••••" autocomplete="off" />
+      </div>
+
+      <div id="pc-pin-unlock-fields" style="display:none;">
+        <label for="pc-pin-unlock" style="display:block;margin:6px 0 4px;" data-i18n="enter_pin">Enter PIN to turn off</label>
+        <input id="pc-pin-unlock" type="password" inputmode="numeric" pattern="[0-9]*" maxlength="8" placeholder="••••" autocomplete="off" />
+      </div>
+
+      <p id="pc-pin-error" class="feedback" style="color:#ff6b6b;min-height:20px;margin-top:8px;"></p>
+
+      <div class="modal-actions" style="margin-top:12px;">
+        <button id="pc-pin-ok" class="btn-confirm" data-i18n="btn_ok">OK</button>
+        <button id="pc-pin-cancel" class="btn-cancel" data-i18n="btn_cancel">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Game Actions Modal -->
+  <div id="game-actions-modal" class="game-actions-modal" style="display:none;">
+    <div class="modal-content game-actions-content">
+      <button id="game-actions-close" class="game-actions-close" aria-label="Close">&times;</button>
+
+      <div class="game-actions-header">
+        <img id="game-actions-cover" class="game-actions-cover" alt="Game Cover" />
+        <div class="game-actions-info">
+          <h2 id="game-actions-title" class="game-actions-title">Game Title</h2>
+          <div id="game-actions-appid" class="game-actions-appid">AppID: 000000</div>
+          <div id="game-actions-size" class="game-actions-size">Size: N/A</div>
+          <div id="game-actions-downloads" class="game-actions-downloads">Downloads: 0</div>
+        </div>
+      </div>
+
+      <div class="game-actions-body" id="game-actions-body">
+        <!-- Buttons will be dynamically inserted here -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Denuvo Warning Modal -->
+  <div id="denuvo-warning-modal" class="modal" role="alertdialog" aria-modal="true" style="display:none;width:auto !important;max-width:95vw !important;padding:0 !important;overflow:hidden !important;max-height:none !important;">
+    <div class="denuvo-warning-content" style="width:auto;max-width:680px;min-width:320px;box-sizing:border-box;max-height:90vh;overflow-y:auto;overflow-x:hidden;">
+      <div class="denuvo-warning-header">
+        <div class="denuvo-warning-icon">⚠️</div>
+        <h2 class="denuvo-warning-title">Account Required</h2>
+        <h3 class="denuvo-warning-title-malay">Akaun Diperlukan</h3>
+      </div>
+
+      <div class="denuvo-warning-body">
+        <!-- English Warning -->
+        <div class="denuvo-warning-message">
+          <p class="denuvo-warning-text-en">
+            <strong>THIS IS DENUVO PROTECTED GAME AND WOULD REQUIRE AN ACCOUNT FROM SELLER FOR ACTIVATION</strong>
+          </p>
+          <ul class="denuvo-warning-list">
+            <li>You will receive login credentials from the seller</li>
+            <li>Account sharing required for activation</li>
+            <li>1. Click Enable Auto Update in Steam Unlock Onennabe</li>
+            <li>2. Close Steam Unlock Onennabe</li>
+            <li>    3. Login to seller account, play until main menu</li>
+            <li>    4. Logout from seller acount and login to your own account to play the game</li>
+          </ul>
+        </div>
+
+        <!-- Malay Warning -->
+        <div class="denuvo-warning-message denuvo-warning-malay">
+          <p class="denuvo-warning-text-my">
+            <strong>INI ADALAH PERMAINAN DILINDUNGI DENUVO DAN MEMERLUKAN AKAUN DARIPADA PENJUAL UNTUK PENGAKTIFAN</strong>
+          </p>
+          <ul class="denuvo-warning-list">
+            <li>Anda akan menerima bukti kelayakan log masuk daripada penjual</li>
+            <li>Perkongsian akaun diperlukan untuk pengaktifan</li>
+            <li>1. Ketik Enable Auto Update in Steam Unlock Onennabe</li>
+               <li> 2. Tutup Steam Unlock Onennabe</li>
+              <li>  3. Log masuk akaun pinjam dari seller, main sampai "main menu"</li>
+             <li>  4. Log keluar dari akaun seller and log masuk dalam akaun sendiri untuk main game</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="denuvo-warning-game-info">
+        <img id="denuvo-warning-cover" class="denuvo-warning-cover" src="" alt="Game Cover" />
+        <div class="denuvo-warning-details">
+          <div id="denuvo-warning-game-name" class="denuvo-warning-game-name">Game Name</div>
+          <div id="denuvo-warning-tags" class="denuvo-warning-tags"></div>
+        </div>
+      </div>
+
+      <div class="modal-actions denuvo-warning-actions">
+        <button id="denuvo-warning-cancel" class="btn-cancel">
+          Cancel / Batal
+        </button>
+        <button id="denuvo-warning-proceed" class="btn-confirm denuvo-warning-proceed-btn">
+          I Understand, Proceed / Saya Faham, Teruskan
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script src="/main.js"></script>
+</body>
+</html>
