@@ -170,6 +170,10 @@ h1 {
   100% {transform: scale(1); opacity: 0.8;}
 }
 
+.install-drive-badge {
+  top: 220px !important;  /* below size-tag and denuvo label */
+}
+
 .installed-tag {
   position: absolute;
   top: 250px;
@@ -2045,25 +2049,53 @@ body.sidebar-expanded .pagination {
 .online-label {
   position: absolute;
   top: 10px;
-  right: 10px;        /* pin to the right side */
-  left: auto;         /* ignore left positioning */
-  width: 60px;       /* fixed size so it won't change */
-  text-align: right; /* center text inside fixed width */
-  background-color: rgba(0, 160, 255, 0.3);
-  color: black;
+  right: 10px;
+  left: auto;
+  width: 60px;
+  text-align: center;
+  background-color: #f5c518;
+  color: #000000;
   z-index: 10;
-  backdrop-filter: blur(5px);
-  padding: 6px 6px;     /* no horizontal padding, fixed width handles space */
+  padding: 6px 6px;
   font-size: 12px;
   font-weight: bold;
   user-select: none;
-  border: none;
+  border: 2px solid transparent;
   border-radius: 10px;
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.6);
-  transition: background-color 0.3s ease;
-  text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.35);
+  transition: background-color 0.2s ease;
+  text-shadow: none;
+  animation: rgb-border 3s linear infinite;
 }
 
+@keyframes rgb-border {
+  0%   { border-color: #ff0000; }
+  33%  { border-color: #00ff00; }
+  66%  { border-color: #0000ff; }
+  100% { border-color: #ff0000; }
+}
+
+.info div[style*="color:yellow"] {
+  position: absolute;
+  top: 40px;
+  left: 10px;
+  width: 80px;
+  word-wrap: break-word;
+  white-space: normal;
+  text-align: center;
+  background-color: #ff0000 !important;
+  color: #ffffff !important;
+  z-index: 10;
+  padding: 6px 10px;
+  font-size: 12px;
+  font-weight: bold;
+  user-select: none;
+  border: 2px solid transparent;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.35);
+  text-shadow: none;
+  animation: rgb-border 3s linear infinite;
+}
 
 .get-patch-btn {
     background: #77bb44;
@@ -4772,3 +4804,46 @@ h1 {
 @keyframes cnyGlow { 0%, 100% {} }
 @keyframes swayLantern { 0%, 100% {} }
 @keyframes swayKetupat { 0%, 100% {} }
+
+.online-warning-title {
+  font-size: 14px !important;
+  font-weight: 700;
+  letter-spacing: 0.4px;
+
+  background: linear-gradient(
+    90deg,
+    #ff4d4d,
+    #ffae00,
+    #00eaff,
+    #6aff6a,
+    #ff4d4d
+  );
+  background-size: 400% 100%;
+
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+
+  animation: rgbGlow 6s linear infinite;
+
+  text-shadow:
+    0 0 6px rgba(255, 100, 100, 0.6),
+    0 0 12px rgba(255, 100, 100, 0.4);
+}
+
+@keyframes rgbGlow {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 400% 50%; }
+}
+
+.denuvo-section .game-actions-section-title {
+  font-size: 18px !important;
+  font-weight: 800;
+  letter-spacing: 0.6px;
+
+  color: #ff4d4d;
+  text-shadow:
+    0 0 6px rgba(255,60,60,0.8),
+    0 0 14px rgba(255,60,60,0.6);
+
+  margin-bottom: 6px;
+}
