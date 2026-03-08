@@ -964,6 +964,8 @@
       isScrolling = true;
       clearTimeout(scrollTimer);
       scrollTimer = setTimeout(() => { isScrolling = false; }, 150);
+      popupHovered = false;
+      hideTrailer();
     }, { passive: true });
     const gameGrid = document.getElementById('game-grid');
     if (gameGrid) {
@@ -971,6 +973,8 @@
         isScrolling = true;
         clearTimeout(scrollTimer);
         scrollTimer = setTimeout(() => { isScrolling = false; }, 150);
+        popupHovered = false;
+        hideTrailer();
       }, { passive: true });
     }
 
