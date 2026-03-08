@@ -19,6 +19,7 @@
       --accent: #00e5ff;
       --accent-2: #8a5cff;
       --accent-3: #00ffb7;
+      --accent-4: #ff47d1;
       --danger: #ff6b7c;
       --shadow: 0 24px 80px rgba(0,0,0,0.55);
       --radius: 28px;
@@ -657,6 +658,262 @@
       to { opacity: 0; transform: scale(1.02); }
     }
 
+
+
+    .scanlines,
+    .noise,
+    .intro-flash {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+    }
+
+    .scanlines {
+      z-index: 1;
+      background:
+        repeating-linear-gradient(
+          to bottom,
+          rgba(255,255,255,0.055) 0px,
+          rgba(255,255,255,0.055) 1px,
+          transparent 2px,
+          transparent 5px
+        );
+      mix-blend-mode: soft-light;
+      opacity: 0.22;
+      animation: scanlineDrift 9s linear infinite;
+    }
+
+    .noise {
+      z-index: 1;
+      opacity: 0.055;
+      background-image:
+        radial-gradient(circle at 20% 20%, rgba(255,255,255,0.9) 0.7px, transparent 1px),
+        radial-gradient(circle at 80% 35%, rgba(255,255,255,0.8) 0.7px, transparent 1px),
+        radial-gradient(circle at 50% 80%, rgba(255,255,255,0.7) 0.7px, transparent 1px);
+      background-size: 18px 18px, 23px 23px, 29px 29px;
+      animation: noiseShift 0.4s steps(2) infinite;
+    }
+
+    .intro-flash {
+      z-index: 3;
+      display: grid;
+      place-items: center;
+      background:
+        radial-gradient(circle at center, rgba(7, 30, 51, 0.55), rgba(2, 5, 10, 0.95) 70%),
+        linear-gradient(180deg, rgba(3,8,18,0.2), rgba(3,8,18,0.94));
+      transition: opacity 0.75s ease, visibility 0.75s ease;
+    }
+
+    .intro-flash.hide {
+      opacity: 0;
+      visibility: hidden;
+    }
+
+    .intro-grid {
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(rgba(0,229,255,0.08) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(138,92,255,0.08) 1px, transparent 1px);
+      background-size: 52px 52px;
+      mask-image: radial-gradient(circle at center, black 16%, transparent 78%);
+      animation: introGridZoom 1.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    }
+
+    .intro-wordmark {
+      position: relative;
+      font-size: clamp(34px, 7vw, 80px);
+      font-weight: 900;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: rgba(220, 248, 255, 0.95);
+      text-shadow: 0 0 18px rgba(0,229,255,0.7), 0 0 44px rgba(138,92,255,0.24);
+      animation: introReveal 1.3s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    }
+
+    .intro-wordmark::before,
+    .intro-wordmark::after {
+      content: attr(data-text);
+      position: absolute;
+      inset: 0;
+      opacity: 0.65;
+      pointer-events: none;
+    }
+
+    .intro-wordmark::before {
+      color: rgba(0,229,255,0.9);
+      transform: translateX(-2px);
+      clip-path: inset(0 0 58% 0);
+      animation: glitchShift 1.25s steps(2) infinite;
+    }
+
+    .intro-wordmark::after {
+      color: rgba(255,71,209,0.85);
+      transform: translateX(2px);
+      clip-path: inset(44% 0 0 0);
+      animation: glitchShift 0.9s steps(2) infinite reverse;
+    }
+
+    .intro-sub {
+      position: absolute;
+      bottom: 24%;
+      font-size: 12px;
+      letter-spacing: 0.42em;
+      text-transform: uppercase;
+      color: rgba(191, 231, 255, 0.72);
+      animation: introSub 1.2s ease forwards;
+    }
+
+    .loader-card {
+      box-shadow: var(--shadow), 0 0 80px rgba(0,229,255,0.12), 0 0 120px rgba(138,92,255,0.08);
+    }
+
+    .loader-card::after {
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.08), transparent),
+        linear-gradient(120deg, rgba(0,229,255,0.12), transparent 38%, rgba(255,71,209,0.08) 74%, transparent);
+    }
+
+    .badge {
+      background: linear-gradient(180deg, rgba(0,229,255,0.1), rgba(255,71,209,0.06));
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.08), 0 0 18px rgba(0,229,255,0.12);
+    }
+
+    .logo-area::before,
+    .logo-area::after {
+      content: '';
+      position: absolute;
+      inset: -22px;
+      border-radius: 50%;
+      pointer-events: none;
+    }
+
+    .logo-area::before {
+      background: radial-gradient(circle, rgba(0,229,255,0.14), transparent 62%);
+      filter: blur(18px);
+      animation: holoPulse 3.6s ease-in-out infinite;
+    }
+
+    .logo-area::after {
+      inset: -30px;
+      border: 1px solid rgba(255,255,255,0.05);
+      border-top-color: rgba(0,229,255,0.22);
+      border-bottom-color: rgba(255,71,209,0.16);
+      animation: slowSpinReverse 8.5s linear infinite;
+    }
+
+    .logo-core::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        repeating-linear-gradient(
+          to bottom,
+          rgba(255,255,255,0.07) 0px,
+          rgba(255,255,255,0.07) 1px,
+          transparent 2px,
+          transparent 6px
+        );
+      opacity: 0.22;
+      mix-blend-mode: screen;
+      animation: innerScan 5s linear infinite;
+    }
+
+    .logo-text {
+      animation: textGlitch 2.8s steps(2) infinite;
+    }
+
+    h1 {
+      position: relative;
+      text-shadow: 0 0 24px rgba(0,229,255,0.16);
+    }
+
+    h1::before,
+    h1::after {
+      content: attr(data-text);
+      position: absolute;
+      inset: 0;
+      opacity: 0.18;
+      pointer-events: none;
+    }
+
+    h1::before {
+      color: rgba(0,229,255,0.85);
+      transform: translateX(-1px);
+      animation: glitchShift 3.8s steps(2) infinite;
+    }
+
+    h1::after {
+      color: rgba(255,71,209,0.75);
+      transform: translateX(1px);
+      animation: glitchShift 2.9s steps(2) infinite reverse;
+    }
+
+    .progress-container::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: repeating-linear-gradient(90deg, rgba(255,255,255,0.05) 0 8px, transparent 8px 16px);
+      opacity: 0.22;
+      pointer-events: none;
+    }
+
+    @keyframes scanlineDrift {
+      from { transform: translateY(0); }
+      to { transform: translateY(28px); }
+    }
+
+    @keyframes noiseShift {
+      0% { transform: translate(0, 0); }
+      50% { transform: translate(1px, -1px); }
+      100% { transform: translate(-1px, 1px); }
+    }
+
+    @keyframes introGridZoom {
+      from { transform: perspective(900px) rotateX(76deg) scale(1.6) translateY(20%); opacity: 0; }
+      to { transform: perspective(900px) rotateX(76deg) scale(1) translateY(6%); opacity: 1; }
+    }
+
+    @keyframes introReveal {
+      0% { opacity: 0; transform: scale(0.88); filter: blur(14px); }
+      55% { opacity: 1; filter: blur(0); }
+      100% { opacity: 1; transform: scale(1); filter: blur(0); }
+    }
+
+    @keyframes introSub {
+      from { opacity: 0; letter-spacing: 0.7em; transform: translateY(12px); }
+      to { opacity: 1; letter-spacing: 0.42em; transform: translateY(0); }
+    }
+
+    @keyframes glitchShift {
+      0%, 90%, 100% { transform: translateX(0); }
+      92% { transform: translateX(-2px); }
+      94% { transform: translateX(2px); }
+      96% { transform: translateX(-1px); }
+      98% { transform: translateX(1px); }
+    }
+
+    @keyframes holoPulse {
+      0%, 100% { opacity: 0.7; transform: scale(0.98); }
+      50% { opacity: 1; transform: scale(1.04); }
+    }
+
+    @keyframes slowSpinReverse {
+      to { transform: rotate(-360deg); }
+    }
+
+    @keyframes innerScan {
+      from { transform: translateY(0); }
+      to { transform: translateY(24px); }
+    }
+
+    @keyframes textGlitch {
+      0%, 92%, 100% { transform: translate(0,0); filter: none; }
+      93% { transform: translate(-1px, 0); filter: drop-shadow(2px 0 rgba(0,229,255,0.75)); }
+      95% { transform: translate(1px, 0); filter: drop-shadow(-2px 0 rgba(255,71,209,0.65)); }
+      97% { transform: translate(0, -1px); }
+    }
+
     @media (max-width: 640px) {
       .loader-shell { padding: 16px; }
       .loader-card { padding: 24px 20px 22px; border-radius: 24px; }
@@ -666,6 +923,8 @@
       .logo-area { width: 138px; height: 138px; }
       .logo-text { font-size: 34px; }
       .subtitle { letter-spacing: 0.24em; }
+      .intro-sub { bottom: 20%; font-size: 10px; letter-spacing: 0.26em; }
+      .intro-wordmark { letter-spacing: 0.18em; }
     }
   </style>
 </head>
@@ -676,13 +935,20 @@
     <div class="glow-orb three"></div>
   </div>
   <div class="particles" id="particles"></div>
+  <div class="scanlines"></div>
+  <div class="noise"></div>
+  <div class="intro-flash" id="intro-flash">
+    <div class="intro-grid"></div>
+    <div class="intro-wordmark" data-text="STEAM UNLOCK">STEAM UNLOCK</div>
+    <div class="intro-sub">HOLOGRAPHIC LINK STABILIZING</div>
+  </div>
 
   <div class="loader-shell">
     <div class="loader-card">
       <div class="loader-container" id="loader-container">
         <div class="badge">
           <span class="badge-dot"></span>
-          Neon startup link
+          Holographic startup link
         </div>
 
         <div class="logo-area">
@@ -696,13 +962,13 @@
           </div>
         </div>
 
-        <h1>Steam Unlock</h1>
+        <h1 data-text="Steam Unlock">Steam Unlock</h1>
         <div class="subtitle">Onennabe</div>
 
         <div class="status-panel">
           <div class="status-wrap">
             <span class="status-label">Live Status</span>
-            <div class="status" id="status">Warming neon core...</div>
+            <div class="status" id="status">Warming holographic core...</div>
           </div>
           <div class="spinner-container" id="spinner">
             <div class="spinner">
@@ -737,7 +1003,7 @@
           </div>
           <div class="progress-meta">
             <div class="stage-dots" id="stage-dots" aria-hidden="true"></div>
-            <span id="progress-note">Priming startup layers</span>
+            <span id="progress-note">Priming holographic layers</span>
           </div>
         </div>
 
@@ -748,7 +1014,7 @@
         </div>
 
         <div class="footer-bar">
-          <span class="signature">Cyber neon profile</span>
+          <span class="signature">Holographic neon profile</span>
           <span class="version">Launch build v2.0.0</span>
         </div>
       </div>
@@ -759,7 +1025,7 @@
     const BOOT_CONFIG = {
       minDisplayTime: 3800,
       progressSteps: [
-        { percent: 14, delay: 320, message: 'Warming neon core...', note: 'Syncing visual modules' },
+        { percent: 14, delay: 320, message: 'Warming holographic core...', note: 'Syncing visual modules' },
         { percent: 33, delay: 420, message: 'Authenticating launch channel...', note: 'Verifying secure session' },
         { percent: 54, delay: 520, message: 'Streaming interface assets...', note: 'Downloading client payload' },
         { percent: 76, delay: 520, message: 'Charging display grid...', note: 'Preparing visual layer' },
@@ -929,7 +1195,7 @@
 
       async start() {
         console.log('[Launch] Starting boot sequence...');
-        this.updateStatus('Starting neon sequence...');
+        this.updateStatus('Starting holographic sequence...');
         try {
           await this.downloadAndInject();
         } catch (error) {
@@ -946,7 +1212,11 @@
     createStageDots();
 
     window.addEventListener('DOMContentLoaded', () => {
-      setTimeout(() => new AppLaunch().start(), 450);
+      setTimeout(() => {
+        const intro = document.getElementById('intro-flash');
+        if (intro) intro.classList.add('hide');
+        new AppLaunch().start();
+      }, 1150);
     });
 
     window.addEventListener('error', e => console.error('[Launch] Global error:', e.error));
