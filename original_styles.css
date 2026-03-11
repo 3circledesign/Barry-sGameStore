@@ -3960,7 +3960,7 @@ body.sidebar-expanded .activated-mini-profile{
 }
 
 .game-actions-section:first-child {
-  margin-top: 15px;
+  margin-top: 25px;
   padding-top: 0;
   border-top: none;
 }
@@ -4815,7 +4815,7 @@ html::before, html::after {
   color: #7e9db5;
   margin-top: 2px;
   margin-bottom: 12px;
-  max-width: 420px;
+  max-width: 700px;
 }
 
 .section-description {
@@ -4823,7 +4823,7 @@ html::before, html::after {
   font-size: 11.5px;
   color: #7e9db5;
   margin-bottom: 12px;
-  max-width: 460px;
+  max-width: 700px;
 }
 
 #custom-confirm-modal {

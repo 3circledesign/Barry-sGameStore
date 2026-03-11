@@ -236,6 +236,7 @@
       <div id="ugm-right">
         <div id="ugm-cover-wrap"><img id="ugm-cover" src="" alt="Cover" /></div>
         <h2 id="ugm-title"></h2>
+        <div id="ugm-primary-actions"></div>
         <div id="ugm-price"></div>
         <div id="ugm-meta"></div>
         <div id="ugm-actions"></div>
@@ -252,10 +253,10 @@
 
     <style>
       #ugm-container {
-        width:min(94vw, 1500px);margin:clamp(10px,3vh,40px) auto;
+        width:min(94vw, 1500px);margin:clamp(4px,1vh,14px) auto;
         background:linear-gradient(145deg,#0e1621,#131c2b);border-radius:14px;
         border:1px solid rgba(102,192,244,0.15);overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,0.8);
-        position:relative;display:flex;flex-direction:row;height:min(88vh, 880px);
+        position:relative;display:flex;flex-direction:row;height:min(98vh, 1080px);
       }
       #ugm-close {
         position:absolute;top:10px;right:10px;z-index:20;background:rgba(0,0,0,0.6);backdrop-filter:blur(4px);
@@ -272,21 +273,21 @@
 
       #ugm-right {
         flex:1.2;
-        min-width:560px;
+        min-width:0;
         display:grid;
         grid-template-columns:230px 1fr;
-        grid-template-rows:auto auto auto auto;
+        grid-template-rows:min-content min-content min-content min-content auto;
         align-content:start;
         gap:12px 16px;
-        padding:18px 18px 14px;
+        padding:12px 18px 10px;
         overflow-y:auto;
       }
 
       #ugm-cover-wrap {
         grid-column:1;
-        grid-row:1 / span 3;
+        grid-row:1 / span 4;
         width:230px;
-        align-self:start;
+        align-self:stretch;
         background:#0a0e16;
         border-radius:12px;
         overflow:hidden;
@@ -298,6 +299,7 @@
       #ugm-cover-wrap img {
         width:100%;
         height:auto;
+        max-height:100%;
         object-fit:contain;
         display:block;
       }
@@ -314,16 +316,23 @@
 
       #ugm-price {
         grid-column:2;
-        grid-row:2;
-        font-size:clamp(20px,1.5vw,30px);
-        font-weight:800;
-        color:#66C0F4;
+        grid-row:3;
+        font-size:9px;
+        font-weight:400;
+        color:#8ba5be;
         margin:0;
+        padding-top:2px;
+        line-height:1.5;
+        align-self: start;
+      }
+      #ugm-price *, #ugm-price {
+        font-size:16px !important;
+        font-weight:400 !important;
       }
 
       #ugm-meta {
         grid-column:2;
-        grid-row:3;
+        grid-row:4;
         font-size:16px;
         color:#b8d3ea;
         line-height:1.65;
@@ -331,12 +340,13 @@
         margin:0;
         border-top:1px solid rgba(102,192,244,0.12);
         border-bottom:none;
+        align-self: start;
       }
 
       #ugm-actions {
-        grid-column: 1;
-        grid-row: 4;
-        margin-top: 50px;
+        grid-column: 1 / -1;
+        grid-row: 5;
+        margin-top: 0;
         display: flex;
         flex-direction: column;
         gap: 10px;
@@ -344,12 +354,13 @@
       }
 
       #ugm-actions .game-actions-section {
-        display:grid;
-        grid-template-columns:repeat(auto-fit,minmax(150px,max-content));
+        display:flex;
+        flex-direction:row;
+        flex-wrap:wrap;
         gap:8px;
         padding-top:8px;
         border-top:1px solid rgba(102,192,244,0.08);
-        align-items:start;
+        align-items:stretch;
       }
       #ugm-actions .game-actions-section:first-child { border-top:none;padding-top:0; }
 
@@ -365,6 +376,9 @@
       }
 
       #ugm-actions .game-action-btn {
+        flex:1 1 auto;
+        min-width:120px;
+        max-width:220px;
         min-height:36px;
         height:36px;
         padding:4px 14px;
@@ -400,7 +414,7 @@
       }
       #ugm-screenshots:empty { display:none; }
       #ugm-screenshots img {
-        height:138px;width:auto;border-radius:4px;cursor:pointer;opacity:0.7;
+        height:110px;width:auto;border-radius:4px;cursor:pointer;opacity:0.7;
         transition:opacity 0.15s,transform 0.15s,border-color 0.15s;
         border:2px solid transparent;flex-shrink:0;
       }
@@ -410,7 +424,7 @@
 
       #ugm-description {
         padding:14px 16px;
-        font-size:15px !important;
+        font-size:13px !important;
         color:#a0bdd0;
         line-height:1.7;
       }
@@ -444,11 +458,11 @@
       #ugm-right::-webkit-scrollbar-thumb, #ugm-left::-webkit-scrollbar-thumb { background:rgba(102,192,244,0.3);border-radius:3px; }
 
       @media (min-width:1400px) {
-        #ugm-container { width:min(92vw,1600px);height:min(88vh,920px); }
+        #ugm-container { width:min(92vw,1600px);height:min(98vh,1120px); }
         #ugm-title { font-size:34px; }
         #ugm-price { font-size:32px; }
-        #ugm-meta { font-size:18px; }
-        #ugm-screenshots img { height:138px; }
+        #ugm-meta { font-size:15px; }
+        #ugm-screenshots img { height:110px; }
         #ugm-actions .game-action-btn { font-size:15px; }
       }
 
@@ -464,11 +478,31 @@
         #ugm-right {
           min-width:0;
           grid-template-columns:170px 1fr;
+          grid-template-rows:auto auto auto auto auto;
           gap:10px 12px;
+        }
+        #ugm-primary-actions {
+          display:block;
+          overflow:visible;
+          padding-bottom:10px;
+        }
+        #ugm-primary-actions .game-actions-section {
+          display:flex !important;
+          flex-direction:row !important;
+          flex-wrap:wrap !important;
+          width:100%;
+          gap:8px !important;
+        }
+        #ugm-primary-actions .game-action-btn {
+          min-width:70px !important;
+          max-width:none !important;
+          flex:1 1 auto !important;
+          font-size:12px !important;
+          padding:7px 8px !important;
         }
         #ugm-cover-wrap { width:170px; }
         #ugm-title { font-size:24px; }
-        #ugm-price { font-size:22px; }
+        #ugm-price { font-size:9px !important; }
         #ugm-meta { font-size:14px; }
       }
 
@@ -480,8 +514,47 @@
         }
         #ugm-cover-wrap {
           width:100%;
-          max-width:220px;
+          max-width:200px;
+          max-height:280px;
           align-self:center;
+          order:1;
+        }
+        #ugm-title { order:2; }
+        #ugm-primary-actions {
+          order:3;
+          display:block;
+          width:100%;
+          overflow:visible;
+          padding-bottom:10px;
+          border-bottom:1px solid rgba(102,192,244,0.15);
+          margin-bottom:4px;
+        }
+        #ugm-primary-actions .game-actions-section {
+          display:flex !important;
+          flex-direction:row !important;
+          flex-wrap:wrap !important;
+          width:100%;
+          gap:8px !important;
+        }
+        #ugm-primary-actions .game-action-btn {
+          min-width:100px !important;
+          flex:1 1 auto !important;
+          white-space:normal !important;
+          height:auto !important;
+          min-height:36px !important;
+          padding:8px 10px !important;
+          font-size:12px !important;
+        }
+        #ugm-price {
+          order:4;
+          width:100%;
+          margin-top:0;
+          padding-top:6px;
+        }
+        #ugm-meta { order:5; }
+        #ugm-actions {
+          order:6;
+          width:100%;
         }
         #ugm-actions .game-actions-section{
           grid-template-columns:repeat(auto-fit,minmax(130px,1fr));
@@ -559,6 +632,39 @@
         justify-content: center !important;
         gap: 12px !important;
       }
+
+      #ugm-primary-actions {
+        grid-column: 2;
+        grid-row: 2;
+        display: block;
+        overflow: visible;
+        padding-bottom: 12px;
+        margin-bottom: 4px;
+        border-bottom: 1px solid rgba(102,192,244,0.15);
+        align-self: start;
+        width: 100%;
+      }
+      #ugm-primary-actions .game-actions-section-title { display: none !important; }
+      #ugm-primary-actions .game-actions-section {
+        display: flex !important;
+        flex-direction: row !important;
+        flex-wrap: wrap !important;
+        border-top: none !important;
+        padding-top: 0 !important;
+        gap: 8px !important;
+        width: 100%;
+      }
+      #ugm-primary-actions .game-action-btn {
+        flex: 1 1 auto !important;
+        min-width: 90px !important;
+        max-width: 180px !important;
+        font-size: clamp(11px,1.2vw,13px) !important;
+        padding: 8px 10px !important;
+        height: 38px !important;
+        min-height: 38px !important;
+        white-space: nowrap !important;
+      }
+
     </style>
 
   </div>
@@ -741,36 +847,42 @@
       // Cover: try multiple CDN URLs in sequence, API image as final fallback
       if (cover) {
         cover._ugmLoaded = false;
-        cover.onload = function() {
-          cover._ugmLoaded = true;
-          // Auto-detect orientation: landscape images use contain, portrait use cover
-          var ratio = cover.naturalWidth / cover.naturalHeight;
-          cover.style.objectFit = 'contain';
-        };
+        cover._ugmExhausted = false;
+
         var coverUrls = [
           'https://steamcdn-a.akamaihd.net/steam/apps/' + game.appid + '/library_600x900.jpg',
           'https://raw.githubusercontent.com/barryhamsy/gamelist/main/' + game.appid + '.jpg'
         ];
+
         var coverIdx = 0;
-        cover.onload = function() { cover._ugmLoaded = true; };
+
+        cover.onload = function() {
+          cover._ugmLoaded = true;
+          cover.style.objectFit = 'contain';
+        };
+
         cover.onerror = function() {
           coverIdx++;
           if (coverIdx < coverUrls.length) {
             cover.src = coverUrls[coverIdx];
           } else {
-            // All CDN failed — will be replaced by API image when it arrives
+            cover._ugmExhausted = true;
             cover.onerror = null;
           }
         };
+
         cover.src = coverUrls[0];
       }
 
       // Build action buttons
+      var primaryActionsEl = document.getElementById('ugm-primary-actions');
       if (actionsEl) {
         actionsEl.innerHTML = '';
+        if (primaryActionsEl) primaryActionsEl.innerHTML = '';
         if (window.__buildGameActionButtons) {
-          window.__buildGameActionButtons(game, launcherStatus, actionsEl);
+          window.__buildGameActionButtons(game, launcherStatus, actionsEl, primaryActionsEl || undefined);
           actionsEl.querySelectorAll('.game-action-btn.details').forEach(function(btn) { btn.remove(); });
+          if (primaryActionsEl) primaryActionsEl.querySelectorAll('.game-action-btn.details').forEach(function(btn) { btn.remove(); });
         }
       }
 
@@ -847,12 +959,18 @@
 
           // Price
           if (sg && priceEl) {
-            if (sg.is_free) { priceEl.textContent = 'Free to Play'; priceEl.style.color = '#4caf50'; }
-            else if (sg.price_overview) {
+            if (sg.is_free) {
+              priceEl.textContent = 'or play for free on Steam';
+            } else if (sg.price_overview) {
               var p = sg.price_overview;
+              var priceLabel = p.final_formatted || '';
+              var priceDisplay = '';
               if (p.discount_percent > 0) {
-                priceEl.innerHTML = '<s style="opacity:0.4;color:#8ba5be">' + (p.initial_formatted||'') + '</s> ' + (p.final_formatted||'') + ' <span style="color:#4caf50">(-' + p.discount_percent + '%)</span>';
-              } else { priceEl.textContent = p.final_formatted || ''; }
+                priceDisplay = '<s style="opacity:0.5">' + (p.initial_formatted||'') + '</s> <span style="color:#66C0F4">' + priceLabel + '</span> <span style="color:#4caf50">(-' + p.discount_percent + '%)</span>';
+              } else {
+                priceDisplay = '<span style="color:#8ec8f0">' + priceLabel + '</span>';
+              }
+              priceEl.innerHTML = 'or buy from Steam for ' + priceDisplay;
             }
           }
 
