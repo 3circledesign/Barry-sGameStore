@@ -956,17 +956,6 @@
               langs = sg.supported_languages.replace(/<[^>]*>/g, '').replace(/\s+/g, ' ').trim();
               if (langs.length > 80) langs = langs.substring(0, 80) + '…';
             }
-            var sz = 'N/A';
-            try { var mr = (sg.pc_requirements && sg.pc_requirements.minimum) || '';
-              var sm = mr.match(/(?:Storage|Hard Drive|Disk Space)[^<]*?<\/strong>\s*([^<]+)/i);
-              if (sm) sz = sm[1].trim();
-            } catch(e) {}
-            if (sz !== 'N/A') {
-              if (!window.__steamSizes) window.__steamSizes = {};
-              window.__steamSizes[String(game.appid)] = sz;
-              var _csi = document.querySelector('[data-appid="' + game.appid + '"] .size-tag');
-              if (_csi) _csi.textContent = sz;
-            }
             var rev = (sg.metacritic && sg.metacritic.score) ? sg.metacritic.score + ' (Metacritic)' : '';
 
             metaEl.innerHTML =
@@ -974,8 +963,7 @@
               ' &ensp;|&ensp; <b style="color:#66C0F4">Release:</b> ' + rel +
               '<br><b style="color:#66C0F4">Developer:</b> ' + dev +
               '<br><b style="color:#66C0F4">Publisher:</b> ' + pub +
-              '<br><b style="color:#66C0F4">Size:</b> ' + sz +
-              (game.size_gb ? ' (' + game.size_gb + ')' : '') +
+              '<br><b style="color:#66C0F4">Size:</b> ' + (game.size_gb || 'N/A') +
               ' &ensp;|&ensp; <b style="color:#66C0F4">Downloads:</b> ' + (game.downloads || 0) +
               (rev ? '<br><b style="color:#66C0F4">Review:</b> ' + rev : '') +
               '<br><b style="color:#66C0F4">Languages:</b> ' + langs;
