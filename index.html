@@ -224,7 +224,7 @@
             <video id="ugm-video" muted loop playsinline style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:contain;background:#000;"></video>
             <div id="ugm-spinner" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:36px;height:36px;border:3px solid rgba(102,192,244,0.2);border-top-color:#66C0F4;border-radius:50%;animation:tpSpin .8s linear infinite;z-index:10;pointer-events:none;"></div>
             <div id="ugm-no-trailer" style="display:none;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);color:rgba(102,192,244,0.5);font-size:13px;">No trailer available</div>
-            <button id="ugm-mute" style="position:absolute;bottom:8px;right:8px;background:rgba(0,0,0,0.7);color:#fff;border:none;border-radius:6px;padding:5px 8px;cursor:pointer;z-index:20;font-size:13px;pointer-events:auto;">🔇</button>
+            <div id="ugm-volume-wrap" style="position:absolute;bottom:8px;right:8px;display:flex;align-items:center;gap:6px;background:rgba(0,0,0,0.7);border-radius:6px;padding:4px 8px;z-index:20;pointer-events:auto;"><button id="ugm-mute" style="color:#fff;border:none;background:none;cursor:pointer;font-size:13px;padding:0;line-height:1;">🔇</button><input id="ugm-volume" type="range" min="0" max="100" value="30" style="width:70px;height:3px;cursor:pointer;accent-color:#66C0F4;"></div>
           </div>
         </div>
         <!-- Screenshots strip -->
@@ -678,7 +678,7 @@
       <video id="tp-video" muted loop playsinline style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:contain;background:#000;pointer-events:auto;"></video>
       <div id="tp-spinner" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:32px;height:32px;border:3px solid rgba(102,192,244,0.2);border-top-color:#66C0F4;border-radius:50%;animation:tpSpin .8s linear infinite;z-index:10;pointer-events:none;"></div>
       <!-- Mute Toggle Button -->
-      <button id="tp-mute-btn" style="position:absolute;bottom:8px;right:8px;background:rgba(0,0,0,0.7);color:#fff;border:none;border-radius:4px;padding:4px 8px;cursor:pointer;z-index:20;font-size:14px;line-height:1;">🔇</button>
+      <div id="tp-volume-wrap" style="position:absolute;bottom:8px;right:8px;display:flex;align-items:center;gap:6px;background:rgba(0,0,0,0.7);border-radius:4px;padding:3px 8px;z-index:20;"><button id="tp-mute-btn" style="color:#fff;border:none;background:none;cursor:pointer;font-size:14px;padding:0;line-height:1;">🔇</button><input id="tp-volume" type="range" min="0" max="100" value="30" style="width:70px;height:3px;cursor:pointer;accent-color:#66C0F4;"></div>
     </div>
     <style>@keyframes tpSpin{to{transform:translate(-50%,-50%) rotate(360deg)}}</style>
   </div>
@@ -712,7 +712,21 @@
     if(l&&l.textContent.indexOf('Indigo Galaxy')===-1){
       l.textContent=l.textContent.replace(/🧧?\s*Chinese New Year/g,'💜 Indigo Galaxy').replace(/🧧?\s*Tahun Baru Cina/g,'💜 Indigo Galaxy').replace(/🧧?\s*Tahun Baru Cino/g,'💜 Indigo Galaxy').replace(/🧧?\s*农历新年/g,'💜 Indigo Galaxy');
     }
-    if(typeof TRANSLATIONS!=='undefined'){['en','bm','zh','ke'].forEach(function(k){if(TRANSLATIONS[k])TRANSLATIONS[k].theme_cny='💜 Indigo Galaxy';});}
+    if(l&&l.textContent.indexOf('Green Galaxy')>-1){
+      l.textContent=l.textContent.replace(/💚?\s*Green Galaxy/g,'🌙 Hari Raya');
+    }
+    if(typeof TRANSLATIONS!=='undefined'){
+      ['en','bm','zh','ke'].forEach(function(k){
+        if(TRANSLATIONS[k]){
+          TRANSLATIONS[k].theme_cny='💜 Indigo Galaxy';
+          TRANSLATIONS[k].theme_hariraya='🌙 Hari Raya';
+        }
+      });
+      // Also fix the button text directly
+      document.querySelectorAll('.theme-pick-btn[data-theme="hariraya"]').forEach(function(btn){
+        if(btn.textContent.indexOf('Green Galaxy')>-1) btn.textContent='🌙 Hari Raya';
+      });
+    }
   },300);
   </script>
 
@@ -886,15 +900,34 @@
         }
       }
 
-      // Mute toggle
+      // Mute toggle + volume
       if (muteBtn && video) {
-        muteBtn.textContent = video.muted ? '🔇' : '🔊';
+        var ugmVolSlider = document.getElementById('ugm-volume');
+        var ugmSavedVol = parseFloat(localStorage.getItem('trailer_volume') || '0.3');
+        video.volume = ugmSavedVol;
+        video.muted = false;
+        function syncUgmVol() {
+          muteBtn.textContent = video.muted ? '🔇' : '🔊';
+          if (ugmVolSlider) ugmVolSlider.value = video.muted ? 0 : Math.round(video.volume * 100);
+        }
+        if (ugmVolSlider) {
+          ugmVolSlider.value = Math.round(ugmSavedVol * 100);
+          ugmVolSlider.oninput = function() {
+            var v = parseInt(this.value) / 100;
+            video.volume = v;
+            video.muted = v === 0;
+            localStorage.setItem('trailer_volume', String(v));
+            syncUgmVol();
+          };
+        }
         muteBtn.onclick = function(e) {
           e.preventDefault(); e.stopPropagation();
           video.muted = !video.muted;
-          muteBtn.textContent = video.muted ? '🔇' : '🔊';
+          if (!video.muted) { var sv = parseFloat(localStorage.getItem('trailer_volume') || '0.3'); video.volume = sv || 0.3; }
+          syncUgmVol();
           if (!video.muted && video.paused) video.play().catch(function(){});
         };
+        syncUgmVol();
       }
 
       // Video events
@@ -938,11 +971,6 @@
               langs = sg.supported_languages.replace(/<[^>]*>/g, '').replace(/\s+/g, ' ').trim();
               if (langs.length > 80) langs = langs.substring(0, 80) + '…';
             }
-            var sz = 'N/A';
-            try { var mr = (sg.pc_requirements && sg.pc_requirements.minimum) || '';
-              var sm = mr.match(/(?:Storage|Hard Drive|Disk Space)[^<]*?<\/strong>\s*([^<]+)/i);
-              if (sm) sz = sm[1].trim();
-            } catch(e) {}
             var rev = (sg.metacritic && sg.metacritic.score) ? sg.metacritic.score + ' (Metacritic)' : '';
 
             metaEl.innerHTML =
@@ -950,8 +978,7 @@
               ' &ensp;|&ensp; <b style="color:#66C0F4">Release:</b> ' + rel +
               '<br><b style="color:#66C0F4">Developer:</b> ' + dev +
               '<br><b style="color:#66C0F4">Publisher:</b> ' + pub +
-              '<br><b style="color:#66C0F4">Size:</b> ' + sz +
-              (game.size_gb ? ' (' + game.size_gb + ')' : '') +
+              '<br><b style="color:#66C0F4">Size:</b> ' + (game.size_gb || 'N/A') +
               ' &ensp;|&ensp; <b style="color:#66C0F4">Downloads:</b> ' + (game.downloads || 0) +
               (rev ? '<br><b style="color:#66C0F4">Review:</b> ' + rev : '') +
               '<br><b style="color:#66C0F4">Languages:</b> ' + langs;
@@ -1150,12 +1177,29 @@
     video.oncanplay = hideSpinner;
     video.onerror = function() { hideSpinner(); title.textContent = 'Trailer unavailable'; };
 
-    // Mute toggle
+    // Mute toggle + volume
     function setupMuteToggle() {
       if (!muteBtn || !video) return;
-      function updateIcon() { muteBtn.textContent = video.muted ? '🔇' : '🔊'; }
+      var tpVolSlider = document.getElementById('tp-volume');
+      var tpSavedVol = parseFloat(localStorage.getItem('trailer_volume') || '0.3');
+      video.volume = tpSavedVol;
+      video.muted = false;
+      if (tpVolSlider) tpVolSlider.value = Math.round(tpSavedVol * 100);
+      function updateIcon() {
+        muteBtn.textContent = video.muted ? '🔇' : '🔊';
+        if (tpVolSlider) tpVolSlider.value = video.muted ? 0 : Math.round(video.volume * 100);
+      }
       updateIcon();
-      muteBtn.onclick = function(e) { e.preventDefault(); e.stopPropagation(); video.muted = !video.muted; updateIcon(); if (!video.muted && video.paused) video.play().catch(()=>{}); };
+      if (tpVolSlider) {
+        tpVolSlider.oninput = function() {
+          var v = parseInt(this.value) / 100;
+          video.volume = v;
+          video.muted = v === 0;
+          localStorage.setItem('trailer_volume', String(v));
+          updateIcon();
+        };
+      }
+      muteBtn.onclick = function(e) { e.preventDefault(); e.stopPropagation(); video.muted = !video.muted; if (!video.muted) { var sv = parseFloat(localStorage.getItem('trailer_volume') || '0.3'); video.volume = sv || 0.3; } updateIcon(); if (!video.muted && video.paused) video.play().catch(()=>{}); };
       video.addEventListener('volumechange', updateIcon);
     }
 
