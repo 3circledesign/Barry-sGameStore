@@ -926,7 +926,7 @@
       }
 
       // Fetch Store API for trailer + details
-      fetch('/api/steamstore/' + game.appid + '?cc=my&l=en')
+      fetch('/api/steamstore/' + game.appid + '?cc=th&l=en')
         .then(function(r) { return r.ok ? r.json() : null; })
         .then(function(data) {
           if (!ugmOpen) return;
@@ -1128,7 +1128,7 @@
       if (spinnerHideTimeout) clearTimeout(spinnerHideTimeout);
       if (muteBtn) muteBtn.textContent = '🔇';
 
-      fetch('/api/steamstore/' + appid + '?cc=my&l=en')
+      fetch('/api/steamstore/' + appid + '?cc=th&l=en')
         .then(r => r.ok ? r.json() : null)
         .then(data => {
           if (currentAppid !== appid) return;
