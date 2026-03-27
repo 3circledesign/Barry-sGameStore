@@ -702,6 +702,63 @@
   <div id="denuvo-warning-modal" class="modal" role="alertdialog" aria-modal="true" style="display:none;width:auto !important;max-width:95vw !important;padding:0 !important;overflow:hidden !important;max-height:none !important;"><div class="denuvo-warning-content" style="width:auto;max-width:680px;min-width:320px;box-sizing:border-box;max-height:90vh;overflow-y:auto;overflow-x:hidden;"><div class="denuvo-warning-header"><div class="denuvo-warning-icon">⚠️</div><h2 class="denuvo-warning-title">Account Required</h2><h3 class="denuvo-warning-title-malay">Akaun Diperlukan</h3></div><div class="denuvo-warning-body"><div class="denuvo-warning-message"><p class="denuvo-warning-text-en"><strong>THIS IS DENUVO PROTECTED GAME AND WOULD REQUIRE AN ACCOUNT FROM SELLER FOR ACTIVATION</strong></p><ul class="denuvo-warning-list"><li>You will receive login credentials from the seller</li><li>Account sharing required for activation</li><li>1. Click Enable Auto Update in Steam Unlock Onennabe</li><li>2. Close Steam Unlock Onennabe</li><li>3. Login to seller account, play until main menu</li><li>4. Logout from seller account and login to your own account to play the game</li></ul></div><div class="denuvo-warning-message denuvo-warning-malay"><p class="denuvo-warning-text-my"><strong>INI ADALAH PERMAINAN DILINDUNGI DENUVO DAN MEMERLUKAN AKAUN DARIPADA PENJUAL UNTUK PENGAKTIFAN</strong></p><ul class="denuvo-warning-list"><li>Anda akan menerima bukti kelayakan log masuk daripada penjual</li><li>Perkongsian akaun diperlukan untuk pengaktifan</li><li>1. Ketik Enable Auto Update in Steam Unlock Onennabe</li><li>2. Tutup Steam Unlock Onennabe</li><li>3. Log masuk akaun pinjam dari seller, main sampai "main menu"</li><li>4. Log keluar dari akaun seller and log masuk dalam akaun sendiri untuk main game</li></ul></div></div><div class="denuvo-warning-game-info"><img id="denuvo-warning-cover" class="denuvo-warning-cover" src="" alt="Game Cover" /><div class="denuvo-warning-details"><div id="denuvo-warning-game-name" class="denuvo-warning-game-name">Game Name</div><div id="denuvo-warning-tags" class="denuvo-warning-tags"></div></div></div><div class="modal-actions denuvo-warning-actions"><button id="denuvo-warning-cancel" class="btn-cancel">Cancel / Batal</button><button id="denuvo-warning-proceed" class="btn-confirm denuvo-warning-proceed-btn">I Understand, Proceed / Saya Faham, Teruskan</button></div></div></div>
 
   <!-- Scripts -->
+  <!-- Legacy v1.3.5 guard: intercepts fetch BEFORE main.js loads.
+       Blocks /auto-update/begin until /auto-update/quit probe confirms v1.3.6+.
+       If probe returns 404 (v1.3.5), shows warning and permanently blocks OTA. -->
+  <script>
+  (function(){
+    var LEGACY_URL = '/auto-update/begin';
+    var PROBE_URL  = '/auto-update/quit';
+
+    // State
+    var _isLegacy   = false; // set true if probe returns 404
+    var _probeReady = false; // set true when probe completes
+    var _probeP     = null;  // the probe promise (shared)
+
+    function _showWarn(){
+      if(document.getElementById('_legacy_warn')) return;
+      var el = document.createElement('div');
+      el.id = '_legacy_warn';
+      el.style.cssText = 'position:fixed;inset:0;z-index:999999;background:rgba(0,0,0,.85);display:flex;align-items:center;justify-content:center;';
+      el.innerHTML = '<div style="width:min(92vw,540px);background:#111827;border:1px solid rgba(239,68,68,.45);border-radius:14px;box-shadow:0 24px 70px rgba(0,0,0,.9);font-family:system-ui,-apple-system,sans-serif;overflow:hidden;"><div style="padding:18px 22px;background:rgba(239,68,68,.15);border-bottom:1px solid rgba(239,68,68,.3);display:flex;align-items:center;gap:12px;"><span style="font-size:24px;">⚠️</span><div><div style="font-weight:800;font-size:17px;color:#fff;">Manual Update Required</div><div style="font-size:12px;color:#f87171;margin-top:3px;">v1.3.5 → v1.3.6 must be installed manually</div></div></div><div style="padding:22px 24px;"><p style="color:#d1d5db;font-size:14px;line-height:1.65;margin:0 0 16px;">You are on <b style="color:#f87171;">v1.3.5</b> which has a broken auto-updater. Please install <b style="color:#34d399;">v1.3.6</b> manually — this is a <b>one-time step</b>. All future updates will work automatically after this.</p><div style="background:#1f2937;border-radius:8px;padding:14px 16px;margin-bottom:20px;font-size:13px;color:#9ca3af;line-height:1.85;"><b style="color:#fff;display:block;margin-bottom:4px;">How to update:</b>1&nbsp;&nbsp;Click <b style="color:#60a5fa;">Download v1.3.6 Installer</b> below<br>2&nbsp;&nbsp;Run the installer — it upgrades your existing install<br>3&nbsp;&nbsp;Relaunch the app — done ✓</div><div style="background:#0f172a;border:1px solid rgba(96,165,250,.25);border-radius:8px;padding:12px 16px;margin-bottom:20px;display:flex;align-items:center;gap:10px;"><span style="font-size:18px;">🔗</span><div style="flex:1;min-width:0;"><div style="font-size:11px;color:#6b7280;margin-bottom:2px;">Direct download link</div><a href="https://github.com/3circledesign/OnennabeBruhHub/releases/latest" target="_blank" style="color:#60a5fa;font-size:13px;word-break:break-all;text-decoration:none;">github.com/3circledesign/OnennabeBruhHub/releases/latest</a></div></div><a href="https://github.com/3circledesign/OnennabeBruhHub/releases/latest" target="_blank" style="display:block;width:100%;box-sizing:border-box;padding:12px 20px;border-radius:8px;background:linear-gradient(135deg,#3b82f6,#1d4ed8);color:#fff;font-weight:700;font-size:14px;text-decoration:none;text-align:center;">⬇&nbsp;&nbsp;Download v1.3.6 Installer</a><p style="text-align:center;margin:12px 0 0;font-size:11px;color:#4b5563;">This message will not go away until you update.</p></div></div>';
+      el.addEventListener('click', function(e){ e.stopPropagation(); });
+      if(document.body) document.body.appendChild(el);
+      else document.addEventListener('DOMContentLoaded', function(){ document.body.appendChild(el); });
+    }
+
+    // Run probe immediately — before main.js even parses
+    _probeP = fetch(PROBE_URL, {method:'GET', cache:'no-store'})
+      .then(function(r){
+        _probeReady = true;
+        if(r.status === 404){
+          _isLegacy = true;
+          window._legacyVersionDetected = true;
+          _showWarn();
+        }
+      })
+      .catch(function(){ _probeReady = true; }); // network err → assume safe
+
+    // Intercept window.fetch so ANY call to /auto-update/begin waits for probe
+    var _realFetch = window.fetch;
+    window.fetch = function(){
+      var url = typeof arguments[0] === 'string' ? arguments[0] : (arguments[0] && arguments[0].url) || '';
+      var args = arguments;
+      if(url.indexOf(LEGACY_URL) !== -1){
+        // Wait for probe, then block if legacy
+        return _probeP.then(function(){
+          if(_isLegacy){
+            // Return a fake "up to date" response so script.js exits cleanly
+            return new Response(JSON.stringify({ok:true, up_to_date:true, version:'blocked'}),
+              {status:200, headers:{'Content-Type':'application/json'}});
+          }
+          return _realFetch.apply(window, args);
+        });
+      }
+      return _realFetch.apply(window, args);
+    };
+  })();
+  </script>
+
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
   <script src="/main.js"></script>
 
