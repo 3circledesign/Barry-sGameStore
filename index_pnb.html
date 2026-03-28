@@ -46,13 +46,7 @@
     <details id="sidebar-tools" class="sidebar-accordion">
       <summary><span data-i18n="settings">Settings</span><span class="chev" aria-hidden="true">▸</span></summary>
       <div class="accordion-body">
-        <div class="sidebar-section">
-          <div class="toggle-row">
-            <span class="toggle-label" data-i18n="parental_control">Parental Control</span>
-            <label class="switch"><input type="checkbox" id="pc-toggle" aria-label="Parental Control"><span class="slider round"></span></label>
-          </div>
-          <small class="toggle-hint" data-i18n="hide_adult">Hide Adult Content</small>
-        </div>
+
         <div class="sidebar-section">
           <div class="zoom-controls">
             <span class="toggle-hint" data-i18n="resize_ui">Resize UI</span>
@@ -68,21 +62,7 @@
         </div>
       </div>
     </details>
-    <!-- Theme Picker -->
-    <details id="sidebar-theme" class="sidebar-accordion">
-      <summary><span data-i18n="theme_label">🎨 Theme</span><span class="chev" aria-hidden="true">▸</span></summary>
-      <div class="accordion-body">
-        <div class="sidebar-section">
-          <small class="toggle-hint" data-i18n="choose_theme">Choose your store theme</small>
-          <div id="theme-btn-group" class="theme-btn-group" style="display:flex;flex-direction:column;gap:6px;margin-top:8px;">
-            <button class="sidebar-btn theme-pick-btn" data-theme="original">🎮 Original</button>
-            <button class="sidebar-btn theme-pick-btn" data-theme="cny">💜 Indigo Galaxy</button>
-            <button class="sidebar-btn theme-pick-btn" data-theme="hariraya">🌙 Hari Raya</button>
-          </div>
-          <div id="theme-active-label" style="margin-top:8px;font-size:11px;color:#888;text-align:center;"></div>
-        </div>
-      </div>
-    </details>
+
     <!-- Language Switcher -->
     <details id="sidebar-language" class="sidebar-accordion">
       <summary><span data-i18n="language_label">🌐 Language</span><span class="chev" aria-hidden="true">▸</span></summary>
@@ -101,7 +81,6 @@
     </details>
      <button id="refresh-games-btn" class="sidebar-btn" data-i18n="refresh_games">Refresh Game List</button>
     <button id="show-installed-btn" class="sidebar-btn" data-i18n="show_installed">Show Installed Only</button>
-    <button id="add-all-btn" class="sidebar-btn" style="display:none;" onclick="window._addAllBtnClick && window._addAllBtnClick()">Unlock<br><span style="font-size:15px;">[Top 5k Games]</span></button>
   </div>
 
   <!-- Main content -->
@@ -693,7 +672,6 @@
   <div id="notification-modal" class="notification-modal" style="display:none;"><div class="notification-content" id="notification-content" style="min-width:320px; text-align:center;"></div></div>
 
   <!-- Parental Control PIN Modal -->
-  <div id="pc-pin-modal" class="modal" role="dialog" aria-modal="true" style="display:none;"><div class="modal-content" style="max-width:420px;"><h2 id="pc-pin-title" style="margin-bottom:8px;" data-i18n="set_pin">Set Parental PIN</h2><p id="pc-pin-desc" style="opacity:.85;margin-bottom:12px;" data-i18n="create_pin">Create a 4–8 digit PIN.</p><div id="pc-pin-setup-fields"><label for="pc-pin-input" style="display:block;margin:6px 0 4px;" data-i18n="pin_label">PIN</label><input id="pc-pin-input" type="password" inputmode="numeric" pattern="[0-9]*" maxlength="8" placeholder="••••" autocomplete="off" /><label for="pc-pin-confirm" style="display:block;margin:12px 0 4px;" data-i18n="confirm_pin">Confirm PIN</label><input id="pc-pin-confirm" type="password" inputmode="numeric" pattern="[0-9]*" maxlength="8" placeholder="••••" autocomplete="off" /></div><div id="pc-pin-unlock-fields" style="display:none;"><label for="pc-pin-unlock" style="display:block;margin:6px 0 4px;" data-i18n="enter_pin">Enter PIN to turn off</label><input id="pc-pin-unlock" type="password" inputmode="numeric" pattern="[0-9]*" maxlength="8" placeholder="••••" autocomplete="off" /></div><p id="pc-pin-error" class="feedback" style="color:#ff6b6b;min-height:20px;margin-top:8px;"></p><div class="modal-actions" style="margin-top:12px;"><button id="pc-pin-ok" class="btn-confirm" data-i18n="btn_ok">OK</button><button id="pc-pin-cancel" class="btn-cancel" data-i18n="btn_cancel">Cancel</button></div></div></div>
 
   <!-- Game Actions Modal -->
   <div id="game-actions-modal" class="game-actions-modal" style="display:none;"><div class="modal-content game-actions-content"><button id="game-actions-close" class="game-actions-close" aria-label="Close">&times;</button><div class="game-actions-header"><img id="game-actions-cover" class="game-actions-cover" alt="Game Cover" /><div class="game-actions-info"><h2 id="game-actions-title" class="game-actions-title">Game Title</h2><div id="game-actions-appid" class="game-actions-appid">AppID: 000000</div><div id="game-actions-size" class="game-actions-size">Size: N/A</div><div id="game-actions-downloads" class="game-actions-downloads">Downloads: 0</div></div></div><div class="game-actions-body" id="game-actions-body"></div></div></div>
@@ -1265,6 +1243,42 @@
       if (grid) new MutationObserver(attachToCards).observe(grid, { childList: true, subtree: true });
     }
     if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();
+  })();
+  </script>
+
+  <!-- Persistent 18+ filter — always active for PORNENNABE -->
+  <script>
+  (function(){
+    function enforce18Plus(){
+      if(typeof filterState === 'undefined' || typeof applyFiltersAndRender === 'undefined') {
+        setTimeout(enforce18Plus, 300);
+        return;
+      }
+      // Lock adultsOnly ON permanently
+      filterState.adultsOnly = true;
+
+      // Highlight the 18+ chip visually
+      var chip = document.getElementById('genre-chip-18plus');
+      if(chip) chip.classList.add('active');
+
+      // Override adultsOnly setter so it can never be turned off
+      try {
+        var _fs = filterState;
+        var _val = true;
+        Object.defineProperty(_fs, 'adultsOnly', {
+          get: function(){ return true; },
+          set: function(){ /* locked */ },
+          configurable: false
+        });
+      } catch(e) {}
+
+      applyFiltersAndRender({ resetPage: true });
+    }
+    if(document.readyState === 'loading'){
+      document.addEventListener('DOMContentLoaded', enforce18Plus);
+    } else {
+      enforce18Plus();
+    }
   })();
   </script>
 </body>
